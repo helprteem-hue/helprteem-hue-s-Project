@@ -24,3 +24,97 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* ─────────────────────────────────────────────────────
+   AI Input Card
+   Base transition covers every property we animate,
+   so state switches always feel smooth.
+───────────────────────────────────────────────────── */
+.ai-input-card {
+  transition:
+    box-shadow     200ms ease,
+    border-color   200ms ease,
+    transform      200ms ease,
+    background     200ms ease;
+}
+
+/* 1 · Resting — barely there, just enough depth */
+.ai-shadow-idle {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 4px 16px -4px rgba(0, 0, 0, 0.07);
+}
+
+/* 2 · Hover — card lifts slightly toward the user */
+.ai-shadow-hover {
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05),
+    0 8px 28px -4px rgba(0, 0, 0, 0.10);
+}
+
+/* 3 · Focused + empty — breathing glow, signals readiness */
+@keyframes ai-glow-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 3px  rgba(0, 0, 0, 0.05),
+      0 8px 36px -4px rgba(0, 0, 0, 0.10);
+  }
+  50% {
+    box-shadow:
+      0 0 0 4px  rgba(0, 0, 0, 0.08),
+      0 14px 48px -4px rgba(0, 0, 0, 0.16);
+  }
+}
+.ai-shadow-focused {
+  animation: ai-glow-pulse 3s ease-in-out infinite;
+}
+
+/* 4 · Focused + typing — steady deep shadow, "thinking" weight */
+.ai-shadow-typing {
+  box-shadow:
+    0 0 0 3.5px rgba(0, 0, 0, 0.07),
+    0 16px 56px -6px rgba(0, 0, 0, 0.18);
+}
+
+/* ─────────────────────────────────────────────────────
+   Sparkle icon — slow, alive, never distracting
+───────────────────────────────────────────────────── */
+@keyframes sparkle-breathe {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.12) rotate(12deg);
+  }
+}
+.animate-sparkle {
+  animation: sparkle-breathe 4s ease-in-out infinite;
+}/* 🌈 Premium animated background */
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.ai-background {
+  background: linear-gradient(
+    -45deg,
+    #ffffff,
+    #f3f4f6,
+    #e5e7eb,
+    #f8fafc,
+    #eef2ff,
+    #f0fdf4
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+}
