@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { MapPin, Clock } from "lucide-react"
+import { generateTimeSlots } from "@/lib/generateSlots"
+import { supabase } from "@/lib/supabase"
 
 const staticStore = {
   business_name: "Salon Beauty by Maya",
@@ -31,9 +33,28 @@ type Hour = { day: string; time: string }
 type Store = typeof staticStore & { services: Service[]; gallery: string[]; hours: Hour[] }
 
   const [store] = useState<Store>(staticStore)
+  const slots = generateTimeSlots("09:00", "18:00", 60)
 
   if (!id) {
     return <div>No storefront ID</div>
+  }
+
+  const handleBooking = async (slot: string) => {
+    const { error } = await supabase.from("bookings").insert([
+      {
+        business_name: "Salon Beauty by Maya",
+        service_name: "בניית ציפורניים",
+        price: 120,
+        date: new Date().toISOString().split("T")[0],
+        time: slot,
+      },
+    ])
+    if (error) {
+      console.error(error)
+      alert("Error booking")
+    } else {
+      alert("Booked!")
+    }
   }
 
   const services = store.services ?? []
@@ -94,6 +115,22 @@ type Store = typeof staticStore & { services: Service[]; gallery: string[]; hour
             </div>
           </section>
         )}
+
+        {/* BOOKING SLOTS */}
+        <section>
+          <h2 className="font-semibold text-right mb-3">בחר שעה</h2>
+          <div className="grid grid-cols-3 gap-2 mt-6">
+            {slots.map((slot) => (
+              <button
+                key={slot}
+                className="border p-2 rounded"
+                onClick={() => handleBooking(slot)}
+              >
+                {slot}
+              </button>
+            ))}
+          </div>
+        </section>
 
         {/* GALLERY */}
         {gallery.length > 0 && (
